@@ -1,6 +1,6 @@
 package com.api.v1.controllers;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.*;
 
 import com.api.v1.models.NoteModel;
 import com.api.v1.services.NoteService;
+
+import javax.validation.Valid;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/notes")
@@ -17,13 +20,13 @@ public class NoteController {
     private NoteService noteService;
 
     @GetMapping
-    public ArrayList<NoteModel> getNotes(){
-        return this.noteService.getNotes();
+    public CompletableFuture<List<NoteModel>> getNotes(){
+        return noteService.getNotes();
     }
 
     @PostMapping
-    public NoteModel saveNote(@RequestBody NoteModel note){
-        return this.noteService.saveNote(note);
+    public NoteModel saveNote(@Valid @RequestBody NoteModel note){
+        return noteService.saveNote(note);
     }
 
     @GetMapping("/{id}")
@@ -32,7 +35,7 @@ public class NoteController {
     }
 
     @PutMapping("/{id}")
-    public NoteModel updateNoteById(@RequestBody NoteModel request,@PathVariable Long id){
+    public NoteModel updateNoteById(@RequestBody NoteModel request, @PathVariable Long id){
         return this.noteService.updateById(request, id);
     }
 

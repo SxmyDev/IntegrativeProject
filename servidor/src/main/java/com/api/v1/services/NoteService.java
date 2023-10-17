@@ -1,21 +1,26 @@
 package com.api.v1.services;
 
-import java.util.ArrayList;
+// import java.util.ArrayList;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.api.v1.models.NoteModel;
 import com.api.v1.repositories.INoteRepository;
 
+import java.util.List;
+
 @Service
 public class NoteService {
     @Autowired    
-    INoteRepository noteRepository;
+    private INoteRepository noteRepository;
 
-    public ArrayList<NoteModel> getNotes() {
-        return (ArrayList<NoteModel>) noteRepository.findAll();
+    @Async
+    public CompletableFuture<List<NoteModel>> getNotes() {
+        return CompletableFuture.completedFuture(noteRepository.findAll());
     }
 
     public NoteModel saveNote(NoteModel note) {
